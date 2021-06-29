@@ -12,7 +12,7 @@ namespace Another.Data.Context
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Address> Addresses { get; set; }

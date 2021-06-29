@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Another.Api.Extensions;
+using Another.Api.Configuration;
 using Another.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,21 +34,14 @@ namespace Another.Api
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddControllers();
+            services.AddIdentityConfiguration(Configuration);
+
+            services.WebApiConfig();
 
             services.AddAutoMapper(typeof(Startup));
 
             services.ResolveDependencies();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Another.Api", Version = "v1" });
-            });
-
-            services.Configure<ApiBehaviorOptions>(opt =>
-            {
-                opt.SuppressModelStateInvalidFilter = true;
-            });
+             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,16 +54,9 @@ namespace Another.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Another.Api v1"));
             }
 
-            app.UseHttpsRedirection();
+            app.UseConfiguration();
 
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+           
         }
     }
 }

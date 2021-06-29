@@ -1,7 +1,9 @@
 ﻿using Another.Api.Dtos;
+using Another.Api.Extensions;
 using Another.Business.Interfaces;
 using Another.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Another.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class SuppliersController : BaseController
     {
@@ -29,6 +32,7 @@ namespace Another.Api.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SupplierDto>>> GetAll()
         {
@@ -46,6 +50,7 @@ namespace Another.Api.Controllers
             return Ok(supplier);
         }
 
+        [ClaimsAuthorize("Supplier","Add")]
         [HttpPost]
         public async Task<ActionResult> Add(SupplierDto supplierDto)
         {
@@ -59,6 +64,7 @@ namespace Another.Api.Controllers
 
         }
 
+        [ClaimsAuthorize("Supplier", "Update")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> Update(Guid id, SupplierDto supplierDto)
         {
@@ -75,6 +81,7 @@ namespace Another.Api.Controllers
             return CustomResponse(supplierDto);
         }
 
+        [ClaimsAuthorize("Supplier", "Delete")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<SupplierDto>> Delete(Guid id)
         {
@@ -90,12 +97,14 @@ namespace Another.Api.Controllers
             
         }
 
+        [ClaimsAuthorize("Supplier", "Get")]
         [HttpGet("address/{id:guid}")]
         public async Task<AddressDto> GetAddressById(Guid id)
         {
             return _mapper.Map<AddressDto>(await _addressRepository.GetById(id));
         }
 
+        [ClaimsAuthorize("Supplier", "Update")]
         [HttpPut("update-address/{id:guid}")]
         public async Task<IActionResult> AtualizarEndereco(Guid id, AddressDto addressDto)
         {

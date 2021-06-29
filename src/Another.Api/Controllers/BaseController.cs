@@ -14,10 +14,12 @@ namespace Another.Api.Controllers
     public abstract class BaseController : ControllerBase
     {
         private readonly INotificator _notificator;
+        // public readonly IUser AppUser;
 
-        public BaseController(INotificator notificator)
+        public BaseController(INotificator notificator) //, IUser appUser)
         {
             _notificator = notificator;
+            // AppUser = appUser;
         }
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)

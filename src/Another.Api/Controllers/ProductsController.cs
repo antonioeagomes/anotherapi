@@ -2,6 +2,7 @@
 using Another.Business.Interfaces;
 using Another.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Another.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ProductsController : BaseController
     {
@@ -40,6 +42,7 @@ namespace Another.Api.Controllers
             return Ok(product);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
         {

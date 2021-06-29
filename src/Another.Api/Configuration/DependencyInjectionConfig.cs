@@ -1,15 +1,17 @@
-﻿using Another.Business.Interfaces;
+﻿using Another.Api.Extensions;
+using Another.Business.Interfaces;
 using Another.Business.Notifications;
 using Another.Business.Services;
 using Another.Data.Context;
 using Another.Data.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Another.Api.Extensions
+namespace Another.Api.Configuration
 {
     public static class DependencyInjectionConfig
     {
@@ -23,6 +25,8 @@ namespace Another.Api.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<INotificator, Notificator>();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUser, AspNetUser>();
 
             return services;
         }
