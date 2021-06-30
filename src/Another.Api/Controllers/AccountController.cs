@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 
 namespace Another.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AccountController : BaseController
     {
         private readonly SignInManager<IdentityUser> _signInManager;

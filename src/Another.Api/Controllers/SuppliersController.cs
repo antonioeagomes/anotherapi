@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 namespace Another.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class SuppliersController : BaseController
     {
         private readonly ISupplierRepository _supplierRepository;

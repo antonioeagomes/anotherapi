@@ -14,6 +14,20 @@ namespace Another.Api.Configuration
         public static IServiceCollection WebApiConfig(this IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(opt =>
+            {
+                opt.GroupNameFormat = "'v'VV";
+                opt.SubstituteApiVersionInUrl = true;
+            });
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
@@ -27,12 +41,7 @@ namespace Another.Api.Configuration
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
-            });
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Another.Api", Version = "v1" });
-            });
+            });            
 
             return services;
         }
