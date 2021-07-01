@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Elmah.Io.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -41,7 +42,7 @@ namespace Another.Api.Configuration
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
-            });            
+            });           
 
             return services;
         }
@@ -54,7 +55,7 @@ namespace Another.Api.Configuration
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization();           
 
             app.UseEndpoints(endpoints =>
             {

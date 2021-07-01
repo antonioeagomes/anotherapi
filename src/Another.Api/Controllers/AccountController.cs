@@ -3,6 +3,7 @@ using Another.Api.Extensions;
 using Another.Business.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -22,14 +23,17 @@ namespace Another.Api.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
         public AccountController(INotificator notificator,
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            IOptions<AppSettings> appSettings) : base(notificator)
+            IOptions<AppSettings> appSettings,
+            ILogger<AccountController> logger) : base(notificator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpPost("sign-up")]
@@ -47,15 +51,18 @@ namespace Another.Api.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation("Registered successfully");
                 await _signInManager.SignInAsync(user, false);
                 return CustomResponse(await GetJwt(userToRegister.Email));
             }
 
+          
             foreach (var item in result.Errors)
             {
                 NotifyError(item.Description);
             }
 
+            _logger.LogError("Some errors");
             return CustomResponse();
         }
 
@@ -69,15 +76,18 @@ namespace Another.Api.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation($"User {login.Email} has logged in");
                 return CustomResponse(await GetJwt(login.Email));
             }
 
             if (result.IsLockedOut)
             {
-                NotifyError("Too many atempts");
+                _logger.LogWarning("Too many attemps");
+                NotifyError("Too many attempts");
                 return CustomResponse();
             }
 
+            _logger.LogError("Wrong credentials");
             NotifyError("Wrong credentials");
             return CustomResponse();
 

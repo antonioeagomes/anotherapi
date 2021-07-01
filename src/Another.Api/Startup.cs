@@ -43,6 +43,8 @@ namespace Another.Api
 
             services.ResolveDependencies();
 
+            services.AddElmahConfig(Configuration);
+
             services.AddSwaggerConfig();
 
 
@@ -57,8 +59,8 @@ namespace Another.Api
                 app.UseSwaggerConfig(provider);
             }
 
-            
 
+            app.UseElmahConfig();
             app.UseConfiguration();
 
            
