@@ -1,21 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using Another.Api.Configuration;
 using Another.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Another.Api.Middleware;
+using HealthChecks.UI.Core;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Another.Api
 {
@@ -41,13 +36,11 @@ namespace Another.Api
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.ResolveDependencies();
+            services.AddLoggingConfig(Configuration);
 
-            services.AddElmahConfig(Configuration);
+            services.ResolveDependencies();           
 
             services.AddSwaggerConfig();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,11 +52,12 @@ namespace Another.Api
                 app.UseSwaggerConfig(provider);
             }
 
+            app.UseLoggingConfig();
 
-            app.UseElmahConfig();
-            app.UseConfiguration();
+            app.UseMiddleware<ExceptionMiddleware>();
 
-           
+            app.UseConfiguration();           
+
         }
     }
 }
