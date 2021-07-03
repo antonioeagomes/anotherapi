@@ -30,7 +30,7 @@ namespace Another.Api.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
 
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigOptions>();
+            
 
             return services;
         }

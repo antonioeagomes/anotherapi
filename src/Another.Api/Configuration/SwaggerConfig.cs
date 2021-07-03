@@ -15,6 +15,8 @@ namespace Another.Api.Configuration
     {
         public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
         {
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, SwaggerConfigOptions>();
+
             services.AddSwaggerGen(c =>
                 {
                     c.OperationFilter<SwaggerDefaultValues>();
